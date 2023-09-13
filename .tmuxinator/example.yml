@@ -1,6 +1,6 @@
 # /Users/yongyang.chen/.config/tmuxinator/hulu-player.yml
 
-name: dss-workspace
+name: example
 root: ~/
 
 # Optional tmux socket
@@ -50,43 +50,19 @@ windows:
       layout: main-vertical
       panes:
         -
-        - ~/workspace/dss
+        -
   - dss/mel-hive:
-      root: ~/workspace/dss/vpe-mel
+      root: ~/workspace
       layout: main-vertical
       panes:
-        - ./mel-hive
-        - ./mel-hive-test-receiver
-        - ./mel-hive-test-receiver
-        - ../fed-ce-dmgz/dmgz-bbd-app
+        -
+        -
+        -
   - dss/core-player:
-      root: ~/workspace/dss/dss-hls
-      layout: main-vertical
-      panes:
-        - ./dss-hls.js
-        - ./dss-hls.js
-        - ./dss-hls.js-configs
-        - ./dss-hls-demo
-  #  - pqm:
-  #      root: ~/workspace/dss/playback-quality-manager
-  #      panes:
-  #        -
-  #        - ./packages/playback-quality-controller
-  - hulu/assaultron:
-      root: ~/workspace/hulu/player/assaultron
-      layout: main-vertical
-      # Synchronize all panes of this window, can be enabled before or after the pane commands run.
-      # 'before' represents legacy functionality and will be deprecated in a future release, in favour of 'after'
-      # synchronize: after
-      panes:
-        -
-        -
-        - ../assaultron-automation-view
-        - ../rtth
-  - hulu/web/chromecast:
-      root: ~/workspace/hulu/player/web-logic-player
+      root: ~/workspace
       layout: main-vertical
       panes:
         -
-        - ~/workspace/hulu/player/site-player
-        - ~/workspace/hulu/player/chromecast
+        -
+        -
+        -

@@ -1,6 +1,3 @@
-set nocompatible
-filetype off
-
 " set the runtime path to include Vundle and initialize
 " set rtp+=~/.vim/bundle/Vundle.vim
 
@@ -31,9 +28,9 @@ call plug#begin('~/.vim/plugged')
 " Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " On-demand loading
+Plug 'christoomey/vim-tmux-navigator'
 " Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-" Plug 'christoomey/vim-tmux-navigator'
 " Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
 " Plug 'vim-airline/vim-airline'
@@ -64,27 +61,24 @@ call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Disable compatibility with vi which can cause unexpected issues.
+set nocompatible
+
+" Enable type file detection. Vim will be able to try to detect the type of file in use.
+filetype on
+
+" Enable plugins and load plugin for the detected file type.
+filetype plugin on
+
+" Load an indent file for the detected file type.
+filetype indent on
+
 " Sets how many lines of history VIM has to remember
 " set history=500
 
-" 开启自动识别文件类型，并根据文件类型加载不同的插件和缩进规则
-filetype plugin on
-filetype indent on
-
 " Set to auto read when a file is changed from the outside
-" set autoread
+set autoread
 " au FocusGained,BufEnter * checktime
-
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
-
-" Fast saving
-nmap <leader>w :w!<cr>
-
-" :W sudo saves the file 
-" (useful for handling the permission-denied error)
-" command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -93,14 +87,52 @@ nmap <leader>w :w!<cr>
 " Set 3 lines to the cursor - when moving vertically using j/k
 set so=3
 
+" Add numbers to each line on the left-hand side.
+set number
+
+" Show relative line number
+set relativenumber
+
+" Highlight cursor line underneath the cursor horizontally.
+set cursorline
+
+" Highlight cursor line underneath the cursor vertically.
+" set cursorcolumn
+
+" Add a bit extra margin to the left
+" set foldcolumn=1
+
+" Highlight 80 column
+set colorcolumn=80
+highlight ColorColumn ctermbg=darkgrey
+
+" Always show current position
+" set ruler
+
+" Show partial command you type in the last line of the screen.
+set showcmd
+
+" Show the mode you are on the last line.
+set showmode
+
+" Enable auto completion menu after pressing TAB.
+set wildmenu
+
+" Make wildmenu behave like similar to Bash completion.
+set wildmode=list:longest
+
+" Height of the command bar
+set cmdheight=1
+
+" There are certain files that we would never want to edit with Vim.
+" Wildmenu will ignore files with these extensions.
+set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
+
 " Avoid garbled characters in Chinese language windows OS
 " let $LANG='en' 
 " set langmenu=en
 " source $VIMRUNTIME/delmenu.vim
 " source $VIMRUNTIME/menu.vim
-
-" Turn on the Wild menu
-set wildmenu
 
 " Ignore compiled files
 " set wildignore=*.o,*~,*.pyc
@@ -109,12 +141,6 @@ set wildmenu
 " else
 "     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 " endif
-
-" Always show current position
-" set ruler
-
-" Height of the command bar
-set cmdheight=1
 
 " A buffer becomes hidden when it is abandoned
 " set hid
@@ -131,11 +157,18 @@ set backspace=eol,start,indent
 " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
 set ignorecase smartcase
 
-" 搜索时高亮显示被找到的文本
+" Use highlighting when doing a search.
 set hlsearch
 
 " 输入搜索内容时就显示搜索结果
 set incsearch
+
+" Show matching words during a search.
+set showmatch
+
+" 插入括号时，短暂地跳转到匹配的对应括号
+" How many tenths of a second to blink when matching brackets
+" set mat=2
 
 " Don't redraw while executing macros (good performance config)
 set lazyredraw 
@@ -143,19 +176,11 @@ set lazyredraw
 " For regular expressions turn magic on
 " set magic
 
-" 插入括号时，短暂地跳转到匹配的对应括号
-" set showmatch
-" How many tenths of a second to blink when matching brackets
-" set mat=2
-
 " No annoying sound on errors
 set noerrorbells
 " set novisualbell
 " set t_vb=
 " set tm=500
-
-" Add a bit extra margin to the left
-" set foldcolumn=1
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -163,6 +188,9 @@ set noerrorbells
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
 syntax enable
+
+" Turn syntax highlighting on.
+syntax on
 
 " Enable 256 colors palette in Gnome Terminal
 " if $COLORTERM == 'gnome-terminal'
@@ -178,6 +206,23 @@ syntax enable
 
 " vim 内部使用的编码，默认使用 latin1，改成通用的 utf8 编码，避免乱码
 set encoding=utf-8
+
+" 文件编码探测列表
+" vim 启动的时候会依次使用本配置中的编码对文件内容进行解码
+" 如果遇到解码失败，则尝试使用下一个编码
+" 常见的乱码基本都是 windows 下的 gb2312, gbk, gb18030 等编码导致的
+" 所以探测一下 utf8 和 gbk 足以应付大多数情况了
+set fileencodings=utf-8,gb18030
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Status line
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim 默认使用单行显示状态，但有些插件需要使用双行展示，不妨直接设成 2
+set laststatus=2
+
+" Format the status line
+" set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -199,12 +244,13 @@ set noswapfile
 " Use spaces instead of tabs
 set expandtab
 
-" Be smart when using tabs ;)
-" set smarttab
-
 " 1 tab == 4 spaces
+" Set shift/tab width to 4 spaces.
 set shiftwidth=4
 set tabstop=4
+
+" Be smart when using tabs ;)
+" set smarttab
 
 " 显示窗口比较小的时候折行展示，不然需要水平翻页，推荐
 set linebreak
@@ -217,36 +263,96 @@ set autoindent
 " set wrap "Wrap lines
 
 
-""""""""""""""""""""""""""""""
-" => Visual mode related
-""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Key Mappings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = "\<space>"
+
+" :W sudo saves the file 
+" (useful for handling the permission-denied error)
+" command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Visual mode
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Insert mode
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Exit insert mode quickly.
+inoremap jk <Esc>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Moving around, tabs, windows and buffers
+" => Normal mode
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
 " map <space> /
 " map <C-space> ?
 
+" Fast saving
+nnoremap <leader>w :w!<cr>
+
+" Fast saving
+nnoremap <leader>wq :wq!<cr>
+
+" Turn off search highlighting
+nnoremap <leader>\ :nohlsearch<CR>
 " Disable highlight when <leader><cr> is pressed
-map <silent> <leader><cr> :noh<cr>
+" map <silent> <leader><cr> :noh<cr>
+
+" Center the cursor vertically when moving to the next word during a search.
+nnoremap n nzz
+nnoremap N Nzz
+
+" Yank from cursor to the end of line.
+nnoremap Y y$
+
+" Exit insert mode after creating a new line above or below the current line.
+nnoremap <leader>o o<esc>
+nnoremap <leader>O O<esc>
+
+" Jump back to the last cursor position.
+nnoremap <leader>- ``
+
+" Map the F5 key to run a Python script inside Vim.
+" I map F5 to a chain of commands here.
+" :w saves the file.
+" <CR> (carriage return) is like pressing the enter key.
+" !clear runs the external clear screen command.
+" !python3 % executes the current file with Python.
+" nnoremap <f5> :w <CR>:!clear <CR>:!python3 % <CR>
+
+" Split the window
+nnoremap <leader>sv :vsplit<CR>
+nnoremap <leader>sh :split<CR>
+
+" Close the window
+nnoremap <leader>sx :quit<CR>
+nnoremap <leader>so :only<CR>
 
 " Smart way to move between windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+
+" Resize split windows
+nnoremap <c-a><c-k> <c-w>+
+nnoremap <c-a><c-j> <c-w>-
+nnoremap <c-a><c-l> <c-w>>
+nnoremap <c-a><c-h> <c-w><
 
 " Close the current buffer
 " map <leader>bd :Bclose<cr>:tabclose<cr>gT
 
 " Close all the buffers
-map <leader>ba :bufdo bd<cr>
+" map <leader>ba :bufdo bd<cr>
 
 map <leader>l :bnext<cr>
 map <leader>h :bprevious<cr>
@@ -265,7 +371,7 @@ au TabLeave * let g:lasttab = tabpagenr()
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
+nnoremap <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
 
 " Switch CWD to the directory of the open buffer
 " map <leader>cd :cd %:p:h<cr>:pwd<cr>
@@ -280,20 +386,6 @@ map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
-
-""""""""""""""""""""""""""""""
-" => Status line
-""""""""""""""""""""""""""""""
-" vim 默认使用单行显示状态，但有些插件需要使用双行展示，不妨直接设成 2
-set laststatus=2
-
-" Format the status line
-" set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Editing mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Remap VIM 0 to first non-blank character
 map 0 ^
 
@@ -322,24 +414,3 @@ map 0 ^
 " if has("autocmd")
 "     autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
 " endif
-
-" 文件编码探测列表
-" vim 启动的时候会依次使用本配置中的编码对文件内容进行解码
-" 如果遇到解码失败，则尝试使用下一个编码
-" 常见的乱码基本都是 windows 下的 gb2312, gbk, gb18030 等编码导致的
-" 所以探测一下 utf8 和 gbk 足以应付大多数情况了
-set fileencodings=utf-8,gb18030
-
-set showcmd
-
-" 显示行号
-set number
-
-" 高亮第 80 列，推荐
-set colorcolumn=80
-highlight ColorColumn ctermbg=darkgrey
-
-" 高亮光标所在行，推荐
-" 有人还会高亮当前列，可以通过 set cursorcolumn 开启，但有点过了，不推荐
-set cursorline
-
