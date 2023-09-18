@@ -102,6 +102,8 @@ export EDITOR='vim'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias vi=nvim
+alias vim=nvim
 alias mux=tmuxinator
 alias mnpm="npm --registry=http://r.npm.sankuai.com --cache=$HOME/.cache/mnpm --disturl=http://npm.sankuai.com/mirrors/node --userconfig=$HOME/.mnpmrc"
 
