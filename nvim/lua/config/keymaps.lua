@@ -7,11 +7,20 @@ local map = vim.keymap.set
 -- map("n", "<leader>wS", "<C-W>s", { desc = "Split window below", remap = true })
 -- map("n", "<leader>ws", "<C-W>v", { desc = "Split window right", remap = true })
 
+-- did not work?
+-- map("t", "<c-h>", "<bs>", { desc = "Backspace" })
+
 map("i", "jk", "<esc>", { desc = "Exit editing" })
+
 map("n", "<leader>qq", "<cmd>q<cr>", { desc = "Quit" })
 map("n", "<leader>qa", "<cmd>qa<cr>", { desc = "Quit all" })
-map("n", "<leader>wz", "<cmd>WindowsMaximize<cr>")
-map("n", "<leader>w=", "<cmd>WindowsEqualize<cr>")
+
+-- disable direction keys
+map({ "n", "i", "v" }, "<Left>", "<Nop>")
+map({ "n", "i", "v" }, "<Right>", "<Nop>")
+map({ "n", "i", "v" }, "<Up>", "<Nop>")
+map({ "n", "i", "v" }, "<Down>", "<Nop>")
+
 -- map("n", "<leader>w-", "<cmd>WindowsMaximizeVertically<cr>")
 -- map("n", "<leader>w|", "<cmd>WindowsMaximizeHorizontally<cr>")
 
